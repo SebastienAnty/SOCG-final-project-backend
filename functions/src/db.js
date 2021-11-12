@@ -1,5 +1,5 @@
 const admin = require("firebase-admin");
-const creds = require("../../credentials.json");
+const creds = require("../credentials.json");
 
 exports.connectDb = () => {
   if (!admin.apps.length) {
