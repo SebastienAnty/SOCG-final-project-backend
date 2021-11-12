@@ -1,32 +1,43 @@
-const {connectDb} = require("./db")
+const { connectDb } = require("./db");
 
 exports.createNewUser = (req, res) => {
-    if(!req.body.fname || !req.body.lname || req.body.email || req.body.onlineid) {
-        res.status(401).send({message: "Invalid Request"})
-        return
-    }
-    const db = connectDb()
-    db.collection("user").add(req.body)
-    .then(docRef => res.status(201).send({ id: docRef.id}))
-    .catch(err => res.status(500).send(err))
-}
+  if (
+    !req.body.fname ||
+    !req.body.lname ||
+    !req.body.email ||
+    !req.body.onlineid
+  ) {
+    res.status(401).send({ message: "Invalid Request" });
+    return;
+  }
+  const db = connectDb();
+  db.collection("users")
+    .add(req.body)
+    .then((docRef) => res.status(201).send({ id: docRef.id }))
+    .catch((err) => res.status(500).send(err));
+};
 
 exports.updateUser = (req, res) => {
-    const db = connectDb()
-    const { userId } = req.params
-    db.collection("user").doc(userId).update(req.body)
-    .then(() => res.status(202).send({ message: "updated"}))
-    .catch(err => res.status(500).send(err))
-}
+  const db = connectDb();
+  let user = req.body;
+  const { id } = req.params;
+  db.collection("users")
+    .doc(id)
+    .update(user)
+    .then(() => this.getUserById(req, res))
+    .catch((err) => res.status(500).send(err));
+};
 
-exports.getUser = (req, res) => {
-    const db = connectDb()
-    const { userId } = req.params
-    db.collection("user").doc(userId).get()
-    .then(doc => {
-        let user = doc.data()
-        user.id = doc.id
-        res.send(user)
+exports.getUserById = (req, res) => {
+  const { id } = req.params;
+  const db = connectDb();
+  db.collection("users")
+    .doc(id)
+    .get()
+    .then((doc) => {
+      let user = req.body;
+      user.id = doc.id;
+      res.send(user);
     })
-    .catch(err => res.status(500).send(err))
-}
+    .catch((err) => res.status(500).send(err));
+};
