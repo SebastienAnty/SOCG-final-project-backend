@@ -39,5 +39,7 @@ exports.getUserById = (req, res) => {
       user.id = doc.id;
       res.send(user);
     })
-    .catch((err) => res.status(500).send(err));
+    .catch((err) => {
+      res.status(500).send(err);
+    });
 };

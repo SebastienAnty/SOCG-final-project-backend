@@ -5,6 +5,7 @@ const admin = require("firebase-admin");
 const creds = require("./credentials.json");
 
 const { createNewUser, updateUser, getUserById } = require("./src/users");
+const { getGames } = require("./src/games");
 
 const app = express();
 app.use(cors());
@@ -13,6 +14,8 @@ app.use(express.json());
 app.post("/users", createNewUser);
 app.patch("/users/:id", updateUser);
 app.get("/users/:id", getUserById);
+
+app.get("/games", getGames);
 
 admin.initializeApp({
   credential: admin.credential.cert(creds),
@@ -34,10 +37,10 @@ app.get("/authenticated", withAuthorization, (req, res) => {
   return res.send({ your: "cool" }).status(200);
 });
 
-const port = 5000;
+// const port = 5000;
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
-});
+// app.listen(port, () => {
+// console.log(`Example app listening at http://localhost:${port}`);
+// });
 
-// exports.app = functions.https.onRequest(app);
+exports.app = functions.https.onRequest(app);
