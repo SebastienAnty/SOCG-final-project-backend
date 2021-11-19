@@ -4,16 +4,23 @@ const cors = require("cors");
 const admin = require("firebase-admin");
 const creds = require("./credentials.json");
 
-const { createNewUser, updateUser, getUserById } = require("./src/users");
+const {
+  createNewUser,
+  updateUser,
+  getUserById,
+  getAllUsers,
+} = require("./src/users");
+
 const { getGames } = require("./src/games");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.post("/users", createNewUser);
-app.patch("/users/:id", updateUser);
-app.get("/users/:id", getUserById);
+app.get("/users/:userId", getUserById);
+app.get("/users", getAllUsers);
+app.post("/newusers", createNewUser);
+app.patch("/users/:userId", updateUser);
 
 app.get("/games", getGames);
 

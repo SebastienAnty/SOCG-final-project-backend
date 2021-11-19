@@ -14,7 +14,9 @@ exports.createNewUser = (req, res) => {
   db.collection("users")
     .add(req.body)
     .then((docRef) => res.status(201).send({ id: docRef.id }))
-    .catch((err) => res.status(500).send(err));
+    .catch((err) => {
+      res.status(500).send(err);
+    });
 };
 
 exports.updateUser = (req, res) => {
@@ -25,19 +27,38 @@ exports.updateUser = (req, res) => {
     .doc(id)
     .update(user)
     .then(() => this.getUserById(req, res))
-    .catch((err) => res.status(500).send(err));
+    .catch((err) => {
+      res.status(500).send(err);
+    });
 };
 
 exports.getUserById = (req, res) => {
-  const { id } = req.params;
+  const { userId } = req.params;
   const db = connectDb();
   db.collection("users")
-    .doc(id)
+    .doc(userId)
     .get()
     .then((doc) => {
-      let user = req.body;
+      let user = doc.data();
       user.id = doc.id;
       res.send(user);
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+};
+
+exports.getAllUsers = (req, res) => {
+  const db = connectDb();
+  db.collection("users")
+    .get()
+    .then((collection) => {
+      const users = collection.docs.map((doc) => {
+        let user = doc.data();
+        user.id = doc.id;
+        return user;
+      });
+      res.send(users);
     })
     .catch((err) => {
       res.status(500).send(err);
