@@ -17,12 +17,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/users/:userId", getUserById);
-app.get("/users", getAllUsers);
-app.post("/newusers", createNewUser);
-app.patch("/users/:userId", updateUser);
+app.get("/rest/users/:userId", getUserById);
+app.get("/rest/users", getAllUsers);
+app.post("/rest/newusers", createNewUser);
+app.patch("/rest/users/:userId", updateUser);
 
-app.get("/games", getGames);
+app.get("/rest/games", getGames);
 
 admin.initializeApp({
   credential: admin.credential.cert(creds),
