@@ -44,10 +44,4 @@ app.get("/authenticated", withAuthorization, (req, res) => {
   return res.send({ your: "cool" }).status(200);
 });
 
-// const port = 5000;
-
-// app.listen(port, () => {
-// console.log(`Example app listening at http://localhost:${port}`);
-// });
-
 exports.app = functions.https.onRequest(app);
